@@ -1,37 +1,32 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelizeInstance from "../db/config";
-import { User as UserInterface } from "../interfaces/User.interface";
+import { Theme as ThemeInterface } from "../interfaces/Theme.interface";
 
-class UserClass extends Model<UserInterface> implements UserInterface {
+class ThemeClass extends Model<ThemeInterface> implements ThemeInterface {
   public id: string = "";
-  public username: string = "";
-  public email: string = "";
-  public password: string = "";
+  public theme: string = "";
+  public backgroundUrl: string = "";
   
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-const UserModel = UserClass.init({
+const ThemeModel = ThemeClass.init({
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  email: {
-    type: DataTypes.STRING,
-    unique: true
-  }, 
-  username: {
+  theme: {
     type: DataTypes.STRING,
     unique: true
   },
-  password: {
+  backgroundUrl: {
     type: DataTypes.STRING
-  }
+  },
 }, {
   sequelize: sequelizeInstance,
-  tableName: "Users"
+  tableName: "Themes"
 })
 
-export default UserModel;
+export default ThemeModel;
