@@ -1,12 +1,17 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelizeInstance from "../db/config";
 import { User as UserInterface } from "../interfaces/User.interface";
+import bcrypt from "bcrypt";
 
-class UserClass extends Model<UserInterface> implements UserInterface {
-  public id: string = "";
-  public username: string = "";
-  public email: string = "";
-  public password: string = "";
+export class UserClass extends Model<UserInterface> implements UserInterface {
+  public id!: string;
+  public username!: string;
+  public email!: string;
+  public password!: string;
+
+  public verifyPassword(password: string) {
+    return bcrypt.compare(password, this.password)
+  }
   
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -21,7 +26,7 @@ const UserModel = UserClass.init({
   email: {
     type: DataTypes.STRING,
     unique: true
-  }, 
+  },
   username: {
     type: DataTypes.STRING,
     unique: true
@@ -31,7 +36,13 @@ const UserModel = UserClass.init({
   }
 }, {
   sequelize: sequelizeInstance,
-  tableName: "Users"
+  tableName: "Users",
+  hooks: {
+    beforeCreate(user) {
+      const hash = bcrypt.hashSync(user.password, 10);
+      user.password = hash;
+    }
+  }
 })
 
-export default UserModel;
+export default UserModel
