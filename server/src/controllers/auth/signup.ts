@@ -9,7 +9,10 @@ const signup = async (req: Request, res: Response) => {
 
       const userExists = await UserModel.findOne({
          where: {
-            [Op.or]: [{ email }, { username }],
+            [Op.or]: {
+               email: email || "",
+               username: username || "",
+            }
          }
       });
 
@@ -18,6 +21,7 @@ const signup = async (req: Request, res: Response) => {
       } 
 
       const user = await UserModel.create({ username, email, password });
+
       return res.status(httpStatusCodes.HTTP_201_CREATED.code).json(httpStatusCodes.HTTP_201_CREATED)
    } catch (error: any) {
       return res.status(httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR.code).json(httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR)

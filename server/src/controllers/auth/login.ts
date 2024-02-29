@@ -11,7 +11,10 @@ const login = async (req: Request, res: Response) => {
 
       const user = await UserModel.findOne({
          where: {
-            [Op.or]: [{ email }, { username }],
+            [Op.or]: {
+               email: email || "",
+               username: username || "",
+            }
          }
       });
 
@@ -29,7 +32,10 @@ const login = async (req: Request, res: Response) => {
 
       return res.status(httpStatusCodes.HTTP_200_OK.code).json({ ...httpStatusCodes.HTTP_200_OK, body: { accessToken, refreshToken } })
    } catch (error) {
-      return res.status(httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR.code).json(httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR)
+      return res.status(httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR.code).json({
+         ...httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR,
+         error
+      })
    }
 }
 
