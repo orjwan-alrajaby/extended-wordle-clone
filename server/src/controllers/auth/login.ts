@@ -26,7 +26,7 @@ const login = async (req: Request, res: Response) => {
 
       if (!AUTH_SECRET) return res.status(httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR.code).json({...httpStatusCodes.HTTP_500_INTERNAL_SERVER_ERROR})
 
-      const accessToken = jwt.sign({ userId: user.id }, AUTH_SECRET, { expiresIn: '1h' });
+      const accessToken = jwt.sign({ userId: user.id }, AUTH_SECRET, { expiresIn: '6h' });
       
       const refreshToken = jwt.sign({ userId: user.id }, AUTH_SECRET, { expiresIn: '1d' });
 
