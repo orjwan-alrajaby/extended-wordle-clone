@@ -1,5 +1,5 @@
 export interface Theme {
-  id: string;
+  id?: string;
   theme: string;
   backgroundUrl: string;
 }

@@ -3,12 +3,12 @@ import sequelizeInstance from "../db/config";
 import { Word as WordInterface } from "../interfaces/Word.interface";
 
 class WordClass extends Model<WordInterface> implements WordInterface {
-  public id: string = "";
-  public word: string = "";
-  public length: number = 0;
-  public themeId: string = "";
-  public levelId: string = "";
-  public isPlayed: boolean = false;
+  public id!: string;
+  public word!: string;
+  public length!: number;
+  public meaning!: string;
+  public themeId!: string;
+  public levelId!: string;
   
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -27,6 +27,10 @@ const WordModel = WordClass.init({
   length: {
     type: DataTypes.INTEGER
   },
+  meaning: {
+    type: DataTypes.STRING,
+    
+  },
   themeId: {
     type: DataTypes.STRING,
     defaultValue: DataTypes.UUIDV4
@@ -35,9 +39,6 @@ const WordModel = WordClass.init({
     type: DataTypes.STRING,
     defaultValue: DataTypes.UUIDV4
   },
-  isPlayed: {
-    type: DataTypes.BOOLEAN
-  }
 }, {
   sequelize: sequelizeInstance,
   tableName: "Words"
