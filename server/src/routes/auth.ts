@@ -8,7 +8,7 @@ import { signUpSchema, loginSchema } from "../validation/user";
 
 const router = Router();
 
-router.post("/signup", validateInput(signUpSchema), signup);
+router.post("/signup", validateInput(signUpSchema), signup(false));
 router.post("/login", validateInput(loginSchema), login);
 
 export default router;

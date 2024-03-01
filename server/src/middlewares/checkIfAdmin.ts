@@ -1,30 +1,33 @@
 import { Request, Response, NextFunction } from "express"
 import httpStatusCodes from "../constants/httpStatusCodes"
 import verifyToken from "../utils/verifyToken";
+import UserModel from "../models/User.model";
 
-const checkIfAuthenticated = async (
+const checkIfAdmin = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const authHeader = req.headers.authorization;
-    const refreshToken = req.headers["refresh-token"] as string;
 
     if (!authHeader) throw ("Authorization header is missing.");
 
     const accessToken = authHeader.split("Bearer ")[1];
 
-    // if verifyToken returns null because accessToken isn't valid
-    // refresh the token
-    const result = verifyToken({ token: accessToken }) || verifyToken({ token: refreshToken, refresh: true });
+    const result  = verifyToken({ token: accessToken })
     
+    if (result?.decoded?.userId) {
+      const user = await UserModel.findOne({
+         where: {
+          id: result?.decoded?.userId
+         }
+      });
 
-    if (result?.decoded) {
-      res.set('Access-Control-Expose-Headers', 'access-token, refresh-token');
-      res.set('access-token', result?.accessToken);
-      res.set('refresh-token', result?.refreshToken);
-      return next();
+      if (user?.role === "admin") {
+        return next();
+      }
+      throw ('User does not have the necessary permissions to complete this operation.')
     }
 
     throw ("Invalid token");
@@ -36,4 +39,4 @@ const checkIfAuthenticated = async (
 };
 
 
-export default checkIfAuthenticated;
+export default checkIfAdmin;

@@ -8,6 +8,7 @@ export class UserClass extends Model<UserInterface> implements UserInterface {
   public username!: string;
   public email!: string;
   public password!: string;
+  public role!: string;
 
   public verifyPassword(password: string) {
     return bcrypt.compare(password, this.password)
@@ -31,9 +32,13 @@ const UserModel = UserClass.init({
     type: DataTypes.STRING,
     unique: true
   },
+  role: {
+    type: DataTypes.STRING,
+    defaultValue: "player",
+  },
   password: {
     type: DataTypes.STRING
-  }
+  },
 }, {
   sequelize: sequelizeInstance,
   tableName: "Users",
