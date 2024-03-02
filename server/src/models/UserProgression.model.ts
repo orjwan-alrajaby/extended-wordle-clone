@@ -3,13 +3,13 @@ import sequelizeInstance from "../db/config";
 import { UserProgression as UserProgressionInterface } from "../interfaces/UserProgression.interface";
 
 class UserProgressionClass extends Model<UserProgressionInterface> implements UserProgressionInterface {
-  public id: string = "";
-  public userId: string = "";
-  public levelId: string = "";
-  public themeId: string = "";
-  public wordId: string = "";
-  public attempts_count: number = 0;
-  public hasGuessedWord: boolean = false;
+  public id!: string;
+  public userId!: string;
+  public levelId!: string;
+  public themeId!: string;
+  public wordId!: string;
+  public attempts_count!: number;
+  public hasGuessedWord!: boolean;
   public timeToGuess!: Date;
   
   public readonly createdAt!: Date;
@@ -24,28 +24,46 @@ const UserProgressionModel = UserProgressionClass.init({
   },
   userId: {
     type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4
+    validate: {
+      notEmpty: true
+    }
   },
   levelId: {
     type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4
+    validate: {
+      notEmpty: true
+    }
   },
   themeId: {
     type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4
+    validate: {
+      notEmpty: true
+    }
   },
   wordId: {
     type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4
+    validate: {
+      notEmpty: true
+    }
   },
   attempts_count: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
   },
   hasGuessedWord: {
-    type: DataTypes.BOOLEAN
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   },
   timeToGuess: {
     type: DataTypes.DATE
+  },
+  gameStatus: {
+    type: DataTypes.STRING,
+    defaultValue: "in_progress",
+  },
+  guesses: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
   }
 }, {
   sequelize: sequelizeInstance,

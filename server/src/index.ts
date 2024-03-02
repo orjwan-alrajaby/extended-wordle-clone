@@ -3,6 +3,7 @@ import sequelizeInstance from "./db/config";
 import { PORT } from "./constants/env"
 import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
+import gameRoutes from "./routes/game";
 import checkIfAuthenticated from "./middlewares/checkIfAuthenticated";
 import checkIfAdmin from "./middlewares/checkIfAdmin";
 
@@ -17,6 +18,7 @@ app.get("/protected", checkIfAuthenticated, (req: Request, res: Response) => {
 
 app.use('/auth', authRoutes);
 app.use('/admin', checkIfAuthenticated, checkIfAdmin, adminRoutes);
+app.use('/game', checkIfAuthenticated, gameRoutes)
 
 app.listen(PORT, async () => {
   console.info(`[server]: Server is running at http://localhost:${PORT}`);
