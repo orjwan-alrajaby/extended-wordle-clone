@@ -19,11 +19,11 @@ const checkIfAuthenticated = async (
     // refresh the token
     const result = verifyToken({ token: accessToken }) || verifyToken({ token: refreshToken, refresh: true });
     
-
     if (result?.decoded) {
       res.set('Access-Control-Expose-Headers', 'access-token, refresh-token');
       res.set('access-token', result?.accessToken);
       res.set('refresh-token', result?.refreshToken);
+      req.userId = result?.decoded?.userId;
       return next();
     }
 
