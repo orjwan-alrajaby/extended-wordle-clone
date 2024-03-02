@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelizeInstance from "../db/config";
 import { UserProgression as UserProgressionInterface } from "../interfaces/UserProgression.interface";
+import ThemeModel from './Theme.model';
 
 class UserProgressionClass extends Model<UserProgressionInterface> implements UserProgressionInterface {
   public id!: string;
@@ -69,5 +70,7 @@ const UserProgressionModel = UserProgressionClass.init({
   sequelize: sequelizeInstance,
   tableName: "UserProgressions"
 })
+
+UserProgressionModel.hasMany(ThemeModel)
 
 export default UserProgressionModel;
